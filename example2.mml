@@ -1,0 +1,13 @@
+read "https://raw.githubusercontent.com/acherm/teaching-MDE1920/master/boston/boston.csv" 
+
+label "medv"
+
+split test 0.25
+
+algorithm DecisionTreeRegression (
+	metric mean_squared_error as "Boston MSE from DTR"
+)
+
+algorithm BayesianLinearRegression (
+	metric r2_score as "Boston R2 score from Bayesian"
+)

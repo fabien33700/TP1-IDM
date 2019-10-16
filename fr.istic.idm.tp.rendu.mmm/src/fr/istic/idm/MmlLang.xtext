@@ -1,0 +1,78 @@
+grammar fr.istic.idm.tp.Mml with org.eclipse.xtext.common.Terminals
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+generate mml "http://www.istic.fr/idm/tp/Mml"
+
+Model:
+	read=Read
+	label=Label
+	features=Features?
+	split=Split
+	algorithm+=Algorithm+
+;
+	
+Read:
+	'read' path=STRING
+;
+
+Label:
+	'label' key=STRING
+;
+
+Features:
+	'features' '(' (features+=STRING (',' features+=STRING)* ) ')'
+;
+
+Split:
+	'split' (splitType=SplitType)? value=PERCENT
+;
+
+SplitType: 'train' | 'test';
+
+Algorithm:
+	'algorithm' algoType=AlgorithmType ('set' (params+=Param (',' params+=Param)* ))? '(' (metrics+=MetricDef (',' metrics+=MetricDef)* ) ')'
+;
+
+
+MetricDef:
+	'metric' type=MetricType ('(' (params+=Param (',' params+=Param)* ) ')')? ('as' alias=STRING)?
+;
+
+ParamValue:
+	FLOAT | STRING
+;
+
+Param: 
+	name=ID '=' value=ParamValue
+;
+
+enum AlgorithmType:
+	OrdinaryLinearRegression | 
+	BayesianLinearRegression |
+	DecisionTreeRegression | 
+	PercentageRegression |
+	QuantileRegression |
+	NonParametricRegression
+;
+
+enum MetricType:
+	explained_variance_score |
+	max_error |
+	mean_absolute_error |
+	mean_squared_error |
+	mean_squared_log_error |
+	median_absolute_error |
+	r2_score
+;
+
+
+terminal PERCENT returns ecore::EDouble:
+	('0' ('.' INT INT?)?) | ('1' ('.0')?)
+;
+
+terminal fragment DIGIT: '0'..'9';
+terminal fragment EXPONENT: 'E' ('+'|'-')? DIGIT+;
+terminal INTEGER returns ecore::EInt: '-'? DIGIT+;
+terminal FLOAT returns ecore::EFloat: INTEGER EXPONENT | INTEGER '.' DIGIT* EXPONENT?;
+

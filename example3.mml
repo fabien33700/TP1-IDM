@@ -1,0 +1,9 @@
+read "https://raw.githubusercontent.com/acherm/teaching-MDE1920/master/boston/boston.csv" 
+
+label "medv"
+
+split train 0.8
+
+algorithm OrdinaryLinearRegression (
+	metric mean_squared_error (multioutput="raw_values") as "Parametized MSE for Ordinary linear regression"
+)

@@ -1,0 +1,12 @@
+read "https://raw.githubusercontent.com/acherm/teaching-MDE1920/master/boston/boston.csv" 
+
+label "medv"
+
+features ( "crim", "indus", "chas", "rm", "age", "tax", "ptratio", "lstat" )
+
+split test 0.25
+
+algorithm DecisionTreeRegressor (
+	metric mean_squared_error as "Boston MSE",
+	metric r2_score
+)
